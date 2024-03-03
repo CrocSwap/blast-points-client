@@ -79,9 +79,6 @@ And similarly for Blast gold dev points:
         },
     ])
 
-    const blast = new BlastPointsSession([CONTRACT_ADDRESS])
-    blast.queryTransferHistory([BATCH_UUID])
-
 Finally to cancel a non-finalized transfer:
 
     import { BlastPointsSession } from "@crocswap-libs/blast-points-client"

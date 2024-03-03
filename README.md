@@ -18,7 +18,8 @@ with the following lines:
 
     import { BlastPointsSession } from "@crocswap-libs/blast-points-client"
 
-    const blast = new BlastPointsSession([CONTRACT_ADDRESS])
+    const contract = [CONTRACT_ADDRESS]
+    const blast = new BlastPointsSession(contract)
 
 ## Querying 
 
@@ -26,24 +27,32 @@ A contract's current Blast points can be queries with:
 
     import { BlastPointsSession } from "@crocswap-libs/blast-points-client"
 
-    const blast = new BlastPointsSession([CONTRACT_ADDRESS])
+    const contract = [CONTRACT_ADDRESS]
+    const blast = new BlastPointsSession(contract)
+    
     let points = await blast.queryPoints()
+    console.log(await points)
 
 The full history of a contract's points transfers can be queries:
 
     import { BlastPointsSession } from "@crocswap-libs/blast-points-client"
 
-    const blast = new BlastPointsSession([CONTRACT_ADDRESS])
+    const contract = [CONTRACT_ADDRESS]
+    const blast = new BlastPointsSession(contract)
+    
     let hist = blast.queryTransferHistory()
+    console.log(await hist)
 
 The distribution of any specific transfer can be queries with:
 
     import { BlastPointsSession } from "@crocswap-libs/blast-points-client"
 
-    const blast = new BlastPointsSession([CONTRACT_ADDRESS])
+    const contract = [CONTRACT_ADDRESS]
+    const blast = new BlastPointsSession(contract)
 
     const batchId = [BATCH_UUID]
     let transfers = blast.queryTransfer(batchId)
+    console.log(await transfers)
 
 ## Transfer
 
@@ -51,7 +60,8 @@ To initiate a Blast bridge liquidity points transfer:
 
     import { BlastPointsSession } from "@crocswap-libs/blast-points-client"
 
-    const blast = new BlastPointsSession([CONTRACT_ADDRESS])
+    const contract = [CONTRACT_ADDRESS]
+    const blast = new BlastPointsSession(contract)
 
     blast.transferLiqPoints([
         { 
@@ -68,7 +78,8 @@ And similarly for Blast gold dev points:
 
     import { BlastPointsSession } from "@crocswap-libs/blast-points-client"
 
-    const blast = new BlastPointsSession([CONTRACT_ADDRESS])
+    const contract = [CONTRACT_ADDRESS]
+    const blast = new BlastPointsSession(contract)
 
     blast.transferDevPoints([
         { 
@@ -85,7 +96,8 @@ Finally to cancel a non-finalized transfer:
 
     import { BlastPointsSession } from "@crocswap-libs/blast-points-client"
 
-    const blast = new BlastPointsSession([CONTRACT_ADDRESS])
+    const contract = [CONTRACT_ADDRESS]
+    const blast = new BlastPointsSession(contract)
 
     blast.cancelTransfer([BATCH_ID])
 

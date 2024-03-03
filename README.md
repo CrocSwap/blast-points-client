@@ -27,21 +27,23 @@ A contract's current Blast points can be queries with:
     import { BlastPointsSession } from "@crocswap-libs/blast-points-client"
 
     const blast = new BlastPointsSession([CONTRACT_ADDRESS])
-    points = await blast.queryPoints()
+    let points = await blast.queryPoints()
 
 The full history of a contract's points transfers can be queries:
 
     import { BlastPointsSession } from "@crocswap-libs/blast-points-client"
 
     const blast = new BlastPointsSession([CONTRACT_ADDRESS])
-    blast.queryTransferHistory()
+    let hist = blast.queryTransferHistory()
 
 The distribution of any specific transfer can be queries with:
 
     import { BlastPointsSession } from "@crocswap-libs/blast-points-client"
 
     const blast = new BlastPointsSession([CONTRACT_ADDRESS])
-    blast.queryTransferHistory([BATCH_UUID])
+
+    const batchId = [BATCH_UUID]
+    let transfers = blast.queryTransfer(batchId)
 
 ## Transfer
 

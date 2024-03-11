@@ -112,12 +112,19 @@ export class BlastPointsSession {
     private contractAddr: string
     private pointsServerUrl: string
     private activeToken: Promise<BearerToken>
+    private secondsToFinalize: number | null
 
     constructor (contractAddr: string, pointsServerUrl: string = BLAST_MAINNET_POINTS_URL) {
         this.operatorKey = pullEnvOperatorKey()
         this.contractAddr = contractAddr
         this.pointsServerUrl = pointsServerUrl
         this.activeToken = this.refreshToken()
+        this.secondsToFinalize = null
+    }
+
+    setSecondsToFinalize(seconds: number): BlastPointsSession {
+        this.secondsToFinalize = seconds
+        return this
     }
 
     async queryPoints(): Promise<PointsBalancesAcross> {
@@ -167,16 +174,17 @@ export class BlastPointsSession {
         return response.data
     }
 
-    async transferLiqPoints (transfers: PointsTransfer[]): Promise<string> {
-        return this.transferRequest({ pointType: 'LIQUIDITY', transfers})
+    async transferLiqPoints (transfers: PointsTransfer[], batchId?: string): Promise<string> {
+        return this.transferRequest({ pointType: 'LIQUIDITY', transfers}, batchId)
     }
 
-    async transferDevPoints (transfers: PointsTransfer[]): Promise<string> {
-        return this.transferRequest({ pointType: 'DEVELOPER', transfers})
+    async transferDevPoints (transfers: PointsTransfer[], batchId?: string): Promise<string> {
+        return this.transferRequest({ pointType: 'DEVELOPER', transfers}, batchId)
     }
 
-    private async transferRequest (transfers: TransferRequest): Promise<string> {
-        const batchId = uuidv4();
+    private async transferRequest (transfers: TransferRequest, batchIdArg?: string): Promise<string> {
+
+        const batchId = batchIdArg || uuidv4();
         const endpoint = `${this.pointsServerUrl}/v1/contracts/${this.contractAddr}/batches/${batchId}`
     
         const response = await axios.put<TransferResponse>(endpoint, transfers, await this.bearerHeader())

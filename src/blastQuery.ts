@@ -176,11 +176,11 @@ export class BlastPointsSession {
     }
 
     async transferLiqPoints (transfers: PointsTransfer[], batchId?: string): Promise<string> {
-        return this.transferRequest({ pointType: 'LIQUIDITY', transfers}, batchId)
+        return this.transferRequest({ pointType: 'LIQUIDITY', transfers, secondsToFinalize: this.secondsToFinalize}, batchId)
     }
 
     async transferDevPoints (transfers: PointsTransfer[], batchId?: string): Promise<string> {
-        return this.transferRequest({ pointType: 'DEVELOPER', secondsToFinalize: this.secondsToFinalize, transfers}, batchId)
+        return this.transferRequest({ pointType: 'DEVELOPER', transfers, secondsToFinalize: this.secondsToFinalize}, batchId)
     }
 
     private async transferRequest (transfers: TransferRequest, batchIdArg?: string): Promise<string> {

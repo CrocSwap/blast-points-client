@@ -34,6 +34,7 @@ type PointType = 'LIQUIDITY' | 'DEVELOPER';
 type TransferRequest = {
     pointType: PointType
     transfers: PointsTransfer[];
+    secondsToFinalize?: number | null;
 }
 
 export type PointsTransfer = {
@@ -179,7 +180,7 @@ export class BlastPointsSession {
     }
 
     async transferDevPoints (transfers: PointsTransfer[], batchId?: string): Promise<string> {
-        return this.transferRequest({ pointType: 'DEVELOPER', transfers}, batchId)
+        return this.transferRequest({ pointType: 'DEVELOPER', secondsToFinalize: this.secondsToFinalize, transfers}, batchId)
     }
 
     private async transferRequest (transfers: TransferRequest, batchIdArg?: string): Promise<string> {

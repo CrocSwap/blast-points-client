@@ -56,8 +56,8 @@ type BearerHeader = {
 type PointsResponse = {
 	success: boolean;
 	balancesByPointType: {
-		LIQUIDITY: PointBalances;
-		DEVELOPER: PointBalances;
+		PHASE2_POINTS: PointBalances;
+		PHASE2_GOLD: PointBalances;
 	};
 };
 
@@ -66,6 +66,11 @@ type TransferPageResponse = {
     batches: TransferBatch[];
     cursor: string | undefined;
 };
+
+type PointsAssetSnapshot = {
+    earnedCumulative: string
+    earnedCumulativeBlock: number
+}
 
 export type PointBalances = {
 	// decimal strings
@@ -78,7 +83,15 @@ export type PointBalances = {
     earnedCumulative: string;
 	receivedCumulative: string; // received from transfers (finalized)
 	finalizedSentCumulative: string; // sent from transfers (finalized)
+    byAsset?: PointsByAsset
 };
+
+export type PointsByAsset = {
+    ETH: PointsAssetSnapshot
+    WETH: PointsAssetSnapshot
+    USDB: PointsAssetSnapshot
+    BLAST: PointsAssetSnapshot
+}
 
 type TransferQueryResponse = {
     success: boolean;
@@ -105,6 +118,7 @@ export type TransferBatchList = TransferBatch & {
 
 export type PointsBalancesAcross = {
     liquidity: PointBalances;
+    liqByToken: PointsByAsset;
     developer: PointBalances;
 }
 
@@ -133,10 +147,16 @@ export class BlastPointsSession {
     
         const response = await axios.get<PointsResponse>(endpoint, await this.bearerHeader())
         if (!response.data.success) { throw new Error('Error: Point query request failed');}
-    
+
+        const byAsset = response.data.balancesByPointType.PHASE2_POINTS.byAsset
+        if (!byAsset) { 
+            throw new Error('Error: No liquidity points by asset found');
+        }
+
         return { 
-            liquidity: response.data.balancesByPointType.LIQUIDITY,
-            developer: response.data.balancesByPointType.DEVELOPER
+            liquidity: response.data.balancesByPointType.PHASE2_POINTS,
+            developer: response.data.balancesByPointType.PHASE2_GOLD,
+            liqByToken: byAsset
         }
     }
 
